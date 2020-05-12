@@ -1,0 +1,135 @@
+
+<!-- An example of how to create a timeline -->
+<!-- -->
+<!-- -->
+<!-- Source: http://talkerscode.com/webtricks/create-vertical-timeline-using-html-and-css.php -->
+
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="timeline_style.css">
+
+
+<style>
+body
+{
+ margin:0 auto;
+ padding: 0px;
+ text-align: center;
+ width: 100%;
+ font-family: "Myriad Pro","Helvetica Neue",Helvetica,Arial,Sans-Serif;
+ background-color: cornflowerblue;
+}
+
+#wrapper
+{
+ margin:0 auto;
+ padding:0px;
+ text-align:center;
+ width:995px;
+}
+
+/* These settings control "h1" 'header tag used within the "wrapper" class */
+#wrapper h1
+{
+ margin-top:50px;
+ font-size:45px;
+ color: green;
+}
+
+/* These settings control "p" 'paragraph' tag used within the "wrapper" class */
+#wrapper p
+{
+ font-size:16px;
+ color: purple;
+ background-color: tomato;
+}
+
+/* These settings control the vertical bar that runs from top to bottom */
+#timeline
+{
+ position:relative;
+ width:670px; /* Note: This controls where the vertical bar is located " centrally across the width" */
+ height:2000px; /* This controls how tall the vertical bar is */
+ float:left;
+ margin-left:145px;
+}
+
+/* These settings control the vertical bar that runs from top to bottom */
+#timeline_bar
+{
+ padding: 0;
+ list-style: none;
+ position: absolute;
+ top: 0;
+ bottom: 0;
+ left: 50%;
+ width: 10px;
+ background-color:red;
+ border-radius:10px;
+}
+
+/* These settings control the features of the boxes on either side of the timeline */
+#timeline li
+{
+ position:relative;
+ margin-top:20px;
+ margin-bottom:20px;
+ width:300px;
+ height:150px;
+ background-color:yellow;
+ padding:15px;
+ box-sizing:border-box;
+ border-radius:10px;
+ list-style-type:none;
+ color:blue;
+ font-size:15px;
+}
+
+/* These settings control the position of the boxes on the left */
+#timeline li:nth-child(odd) 
+{
+ margin-right:10px;
+ right:-10px;
+}
+
+/* These settings control the position of the boxes on the right */
+#timeline li:nth-child(even)
+{
+ left:370px;
+}
+
+    </style>
+
+</head>
+
+<body>
+	<div id="wrapper">
+
+		<h1> The Basic TimeLine </h1>
+
+		<p> This is where you can arrange to show cool information about stuff </p>
+
+		<div id="timeline">
+
+			<div id="timeline_bar">
+
+			</div>
+
+				<li>Tomat etope eyeri riene ibedi, si redered dekera tirete nela ila etegeda hame, epirona suni osenieboy labal horini pic erumohu, ide tetolot mihimi toda hafase.</li>
+				<li>Devic tep senape ieleve hocar nilute bece pipopa for nenatic! Pora taliho lulofo amasefe soni yil emeni. Ta aroh ahaharet tun nahiy edohoros lolison cey eyecun.</li>
+				<li>Sove beconeb haca tonupi nepe pe ne ilol oxasasop! Datere ohovis tiwi mun rugejet qi leyib uli. Rodedov verilis oni me tedafi to mote siyec ute tapeg. </li> 
+				<li>Exale roco semijel xidome piki coda aga fibani, nibupo ipe elan toh logosir nekuten miedie gohotir. Hi nebeser asat inalaso.</li>
+				<li>Laninis ecebu ukerala de idoyi omuciyip meteni? Alesap senien bari ifogore dus domof horare yi saveso nir. Ce lie hogitet dilie le ciecoc son lo eho. Icat xovu riretos.</li>
+				<li>Tomat etope eyeri riene ibedi, si redered dekera tirete nela ila etegeda hame, epirona suni osenieboy labal horini pic erumohu, ide tetolot mihimi toda hafase.</li>
+				<li>Devic tep senape ieleve hocar nilute bece pipopa for nenatic! Pora taliho lulofo amasefe soni yil emeni. Ta aroh ahaharet tun nahiy edohoros lolison cey eyecun.</li>
+				<li>Sove beconeb haca tonupi nepe pe ne ilol oxasasop! Datere ohovis tiwi mun rugejet qi leyib uli. Rodedov verilis oni me tedafi to mote siyec ute tapeg. </li> 
+				<li>Exale roco semijel xidome piki coda aga fibani, nibupo ipe elan toh logosir nekuten miedie gohotir. Hi nebeser asat inalaso.</li>
+				<li>Laninis ecebu ukerala de idoyi omuciyip meteni? Alesap senien bari ifogore dus domof horare yi saveso nir. Ce lie hogitet dilie le ciecoc son lo eho. Icat xovu riretos.</li>
+
+		</div>
+
+	</div>
+
+</body>
+</html>
+    
