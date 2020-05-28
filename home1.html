@@ -1,0 +1,262 @@
+<html>
+    <head>
+        <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-database.js"></script>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+       
+        <!-- This link and script are both needed for the Leaflet Map API to work -->
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin=""/>
+        <!-- Make sure you put this AFTER Leaflet's CSS -->
+        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+
+        <style type="text/css">
+
+        #mapid { height: 400px; width: 800px;}
+
+        /* CSS Features */
+
+        /* Features specifically for the "h1" tag */
+
+        h1{
+        text-align: center;
+        color: #485e74;
+        background-color: #c9e6ff;
+        }
+
+        h2{
+        text-align: center;
+        color: #485e74;
+        background-color: #c9e6ff;
+        }
+
+        /* Features specifically for the "p" tag */
+        p{
+        text-align: center;
+        color: #485e74;
+        }
+
+        /* Features that apply to the whole body */
+        body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #92bde7;
+        }
+
+
+        /* Features specifically for the TOP NAVIGATION BAR */
+        .topnav {
+        overflow: hidden;
+        }
+
+        /* Features specifically for the TOP NAVIGATION BAR */
+        .topnav a {
+        float: left;
+        color: #485e74;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+        }
+
+
+        /* Features specifically for the TOP NAVIGATION BAR */
+        .topnav a:hover {
+        background-color: #ddd;
+        color: #485e74;
+        }
+
+        /* Features specifically for the TOP NAVIGATION BAR */
+        .topnav a.active {
+        background-color: #c9e6ff;
+        color: #485e74;
+        }
+
+        .wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+
+            grid-auto-rows: minmax(100px, auto); 
+            grid-gap: 5px;
+            background-color: coral;
+            padding: 5px;
+        }
+
+
+        /* These features would apply to any "div" that is used in the grid "wrapper" */
+        .wrapper > div {
+            background-color: #c9e6ff;
+            text-align: center;
+            padding: 10px 10px;
+            font-size: 18px;
+
+
+        </style>
+ 
+    </head>
+
+<body onload="getData()">
+            <h1 id="uid"></h1> <!-- This is a placeholder for future database applications -->
+            
+            <div class="topnav">
+            <a class="active" href="home1.html">Recovid19</a>
+            <a href="timeline1.html">Timeline</a>
+            <a href="https://give.undp.org/campaign/undp-giving/c120717">Donate</a>
+            <a href="index.html">Log out</a>
+            </div>
+     
+    <h1>Heat map</h1>
+
+    <h2>How are toronto businesses being affected right now?</h2>
+
+    <div class="wrapper">
+        
+            <div id="mapid"></div> <!-- Put this marker where you want the map to be -->
+            
+
+            <div>
+            
+                <p>Legend</p>
+                <p></p>
+                <p>Red circle indicates a company is in severe need of help.</p>
+                <p>Orange circle indicates a company would appreciate help.</p>
+                <p></p>
+                <p>Please click on circles near you in order to contact these companies and help them.</p>
+            </div>
+    </div>
+
+    
+                 
+    </body>
+
+    <script>
+
+        var provider = new firebase.auth.GoogleAuthProvider();
+
+
+        var config = {
+
+            apiKey: "AIzaSyDjE-sz5wbwyQYLgiNb4zrEzlXoFokfB_8",
+            authDomain: "kimothy5.firebaseapp.com",
+            databaseURL: "https://kimothy5.firebaseio.com",
+            projectId: "kimothy5",
+            storageBucket: "kimothy5.appspot.com",
+            messagingSenderId: "1001806703876",
+            appId: "1:1001806703876:web:a9f507acc288807b6cb451",
+            measurementId: "G-EM2JTCGZH1"
+
+        };
+
+          firebase.initializeApp(config);
+
+          function getData() {
+            console.log("hello");
+
+            // Create a database object that we can refer to
+            var database = firebase.database();
+
+            var ref = database.ref('company info');
+
+            ref.on('value', gotData, errData) 
+            // jump to the helper function...think of 'value' as the parameter that is passed
+        }
+
+          function gotData(data) {
+          // console.log("hello part 2"); 
+        // This will be the center of the map as it loads
+            var myGPS = L.latLng(43.6532, -79.3832);
+
+            // This creates the map object and sets the zoom level
+            var mymap = L.map('mapid').setView(myGPS, 12); 
+
+            // All Maps must have the copyright and "credits" info
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+              attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+              maxZoom: 18,
+              id: 'mapbox/streets-v11',
+              //id: 'mapbox/satellite-v9',
+              tileSize: 512,
+              zoomOffset: -1,
+
+              // You have a signup at MapBox to get your own access token! This one is belongs to Mr. J.
+              accessToken: 'pk.eyJ1IjoiYWp1Z29vbiIsImEiOiJjazhuZm40ZWQweG5mM3JwZ280ZWVxMmoxIn0.jwqPzC0F6Mynb62yifx2kw'
+            }).addTo(mymap);
+
+            // // Add some location markers. You can look up GPS coordinates online
+
+            // var marker1 = L.marker([43.6931, -79.4040]).addTo(mymap); // mark off UCC
+            // var marker2 = L.marker([43.6902, -79.4091]).addTo(mymap); // mark off BSS
+
+            // // Add a circle - specify its colour and radius
+            // // Timothy Eaton Memorial Church coordnates: 43.686207 -79.405822
+
+            // var circle1 = L.circle([43.686207, -79.405822], {
+            //     color: 'orange',
+            //     fillColor: 'orange',
+            //     fillOpacity: 0.5,
+            //     radius: 100
+            // }).addTo(mymap);
+
+            // // Here we can add pop-ups to various locations
+
+            // circle1.bindPopup("<b>Hello world!</b><br>I am UCC!").openPopup(); //sample popup can be replaced by heatmap functionality later.
+
+            var test = data.val(); 
+            var keys = Object.keys(test);
+            // console.log(keys)
+            var circle = [];
+            for (var i = 0; i < keys.length; i++) {
+                var k = keys[i];
+
+                var lat = test[k].latitude;
+                var intlat = parseFloat(lat);
+                // console.log(latitude);
+
+                var lng = test[k].longitude;
+                var intlng = parseFloat(lng);
+                // console.log(longitude);
+
+                var latlng = [intlat, intlng];
+                // console.log(latlng);
+
+                var email = test[k].email;
+                // console.log(email);
+
+                var number = test[k].phonenumber;
+                // console.log(number);
+
+                var severity = test[k].severity;
+                if (severity == "severe") {
+                    var color = 'red';
+                }
+                else {
+                    var color = 'orange';
+                }
+                // console.log(color);
+                var circle = L.circle(latlng, {
+                    color: color,
+                    fillColor: color,
+                    fillOpacity: 0.5,
+                    radius: 100
+                }).addTo(mymap).bindPopup("<b>Contact this business through email or phone</b><br>Email: "+email+"<br>Phone Number: "+number);
+                console.log(latlng);
+            }
+            // var test = [43.686207, -79.405822];
+            // console.log(test)
+            
+            // console.log(circle);
+        }
+
+        function errData(err){
+          console.log('Error!')
+          console.log(err)
+        }
+
+    </script>
+</html>
