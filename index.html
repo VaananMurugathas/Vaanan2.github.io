@@ -198,10 +198,11 @@ function login() {
   var password = document.getElementById('password').value;
   var email = document.getElementById('email').value;
   var phone = document.getElementById('phone').value;
-  var type = document.getElementById('user').value; 
+  var type = document.getElementById('user').value;
+
 
   // alert("U have logged in");
-
+  firebase.auth().signOut();
   firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
     // Handle Errors here.
     var errorCode = error.code;
@@ -210,54 +211,100 @@ function login() {
     alert("Error: "+errorMessage);
   });
 
-  // firebase.auth().onAuthStateChanged(user => {
-  //   var uid = user.uid;
-  //   alert(uid);
-  // })
-  // database.ref('User Info/'+)
+    var user = firebase.auth().currentUser;
+    firebase.auth().onAuthStateChanged(function(user) {
+      var name = document.getElementById('name').value;
+      var password = document.getElementById('password').value;
+      var email = document.getElementById('email').value;
+      var phone = document.getElementById('phone').value;
+      var type = document.getElementById('user').value;
 
-  // var ref = database.ref('User Info');
-  // var data = {
-  //   username: name,
-  //   phone_number: phone,
-  //   type_of_user: type
+
+      // alert("U have logged in");
+      firebase.auth().signOut();
+      firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+
+        alert("Error: "+errorMessage);
+      });
+      
+      if (user) {
+        if (type == "person") {
+          var uid = firebase.auth().currentUser.uid;
+          firebase.database().ref('User info/' + uid).set({
+            username: name,
+            phone_number: phone,
+            type_of_user: type,
+            email: email 
+          });
+          // alert(user);
+          location.replace("home1.html");
+        }
+        else {
+          var uid = firebase.auth().currentUser.uid;
+          firebase.database().ref('User info/' + uid).set({
+            username: name,
+            phone_number: phone,
+            type_of_user: type,
+            email: email 
+          });
+          // console.log(user);
+          location.replace("home2.html");
+        }
+      }
+      else {
+        // location.replace("index.html")
+      }
+    });
+
+    }
+
+  // if (user != null) {
+  //   if (type == "person") {
+  //     // alert("You have signed in as a citizen");
+  //     firebase.auth().onAuthStateChanged(function(user) {
+  //         if (user) {
+  //           var uid = firebase.auth().currentUser.uid;
+  //           firebase.database().ref('User info/' + uid).set({
+  //             username: name,
+  //             phone_number: phone,
+  //             type_of_user: type,
+  //             email: email 
+  //           });
+  //           location.replace("home1.html");
+  //         }
+  //         else {
+  //           // window.alert("There was a problem logging in. Please try again");
+  //           // location.replace("index.html");
+  //         }
+  //       });
+  //   }
+
+  //   else {
+  //     // alert("You have signed in as a company");
+  //     firebase.auth().onAuthStateChanged(function(user) {
+  //         if (user) {
+  //           var uid = firebase.auth().currentUser.uid;
+  //           firebase.database().ref('User info/' + uid).set({
+  //             username: name,
+  //             phone_number: phone,
+  //             type_of_user: type,
+  //             email: email 
+  //           });
+  //           location.replace("home2.html");
+  //         }
+  //         else {
+  //           // window.alert("There was a problem logging in. Please try again");
+  //           // location.replace("index.html");
+  //         }
+  //       });      
+  //   }
+  //   // alert("signed in")
+
   // }
-  // console.log(data);
-  // ref.push(data);
 
-  if (user != null) {
-    if (type == "person") {
-      alert("You have signed in as a citizen");
-      firebase.auth().onAuthStateChanged(user => {
-        var uid = firebase.auth().currentUser.uid;
-        firebase.database().ref('User info/' + uid).set({
-          username: name,
-          phone_number: phone,
-          type_of_user: type,
-          email: email 
-        });
-      });
-      location.replace("home1.html");
-    }
-
-    else {
-      alert("You have signed in as a company")
-      firebase.auth().onAuthStateChanged(user => {
-        var uid = firebase.auth().currentUser.uid;
-        firebase.database().ref('User info/' + uid).set({
-          username: name,
-          phone_number: phone,
-          type_of_user: type,
-          email: email 
-        });
-      });
-      location.replace("home2.html");      
-    }
-    // alert("signed in")
-
-  }
-
-}
 </script>
 
 </html>
